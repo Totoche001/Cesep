@@ -1,0 +1,16 @@
+Logique de changement de mode :
+
+    Votre variable modeIn alterne entre deux modes : allumer les LEDs à différentes intensités ou les éteindre.
+    La logique semble correcte, mais il faut s'assurer que les LEDs ont suffisamment de temps pour effectuer l'animation de fading.
+
+Problème potentiel avec fadeTo() et la durée de fading :
+
+    Si la durée de fading est trop longue (par exemple, 3000ms dans ClassLed), il se peut que la LED n'ait pas le temps d'atteindre 0 avant que le mode ne change. Dans ce cas, la LED serait encore faiblement allumée avant d'être remise à une intensité plus élevée.
+
+Réduire la durée de fading dans votre classe ClassLed pour que les LEDs aient le temps d'atteindre l'intensité 0 dans le délai de 6 secondes.
+
+    Vous pouvez tester une durée de fade plus courte, par exemple 1000ms, pour vous assurer que les LEDs s'éteignent avant le prochain changement de mode.
+
+Utiliser un contrôle explicite de la LED lorsqu'elle atteint 0 :
+
+    Comme suggéré précédemment, assurez-vous que digitalWrite(_pin, LOW) est bien appelé lorsque l'intensité devient 0, pour éviter que la LED reste faiblement allumée.

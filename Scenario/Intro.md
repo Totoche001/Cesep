@@ -1,0 +1,3 @@
+# Histoire de Strategon
+
+et puis voila...

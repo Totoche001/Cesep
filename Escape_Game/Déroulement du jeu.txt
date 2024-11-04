@@ -1,0 +1,71 @@
+Rédaction d'une STORY Utilisateurs type
+ En tant que … Joueur
+ Je veux … Game Master
+ Afin de …
+
+Accueil
+ En tant que J, je veux Comprendre ce qu'est un Escape Game Afin de m'amuser
+  Rédiger les explications
+  Rédiger les consignes /!\ Inviter les joueurs à s'assoir
+ ETQ Game Master, JV accueillir les joueurs AFIN leur donner les consignes
+  Synthétiser les explications
+  Synthétiser les consignes
+  Imprimer les synthèses
+  V2 è Plastifier les synthèses
+Introduction
+ ETQ J JV connaître mon cadre de jeu AD d'être immergé
+ ETQ J JV une ambiance lumineuse AD rester cohérent
+ ETQ J JV une ambiance Sonore AD rester cohérent
+ ETQ J JV des décors AD rester cohérent
+ ETQ J JV que la porte se ferme AD m'échapper
+
+
+Énigme 1 – Ouija
+ ETQ J JV savoir que le tableau a bouger AD trouver la table de ouija
+ ETQ J JV savoir où poser le tableau AD de le poser
+ ETQ J JV scanner la table de ouija avec la tablette AD connaître le n° de page d'un livre
+ ETQ J JV une ambiance lumineuse AD rester cohérent
+ ETQ J JV une ambiance Sonore AD rester cohérent
+ ETQ J GM un tableau de bord AD lancer les indices
+  ETQ J GM un tableau de bord AD déclencher les énigmes bugées
+
+Énigme 2 – Photo souvenir
+ ETQ J JV Trouver le code de l'imprimante 3D AD Lancer l'impression
+ ETQ J JV voir la vidéo de la pièce qui s'imprime AD récupérer la pièce
+ ETQ J JV une ambiance lumineuse AD rester cohérent
+ ETQ J JV une ambiance Sonore AD rester cohérent
+ ETQ J JV entendre des bruitages AD d'être réaliste (+ mieux)
+ ETQ J GM un tableau de bord AD lancer les indices
+  ETQ J GM un tableau de bord AD déclencher les énigmes bugées
+Énigme 3 – Échiquier
+ ETQ J JV placer les pièces au bon endroit sur l'échiquier AD déverrouiller le labyrinthe et le casque VR
+ ETQ J GM un tableau de bord AD lancer les indices
+  ETQ J GM un tableau de bord AD déclencher les énigmes bugées
+
+Énigme 4 – Le monde parallèle
+ Mettre le casque
+ Trouver hiéroglyphes sur les murs IRL
+ Convertir hiéroglyphes IRL en chiffres è Code pour VR
+ VR : Enfoncer les boutons sur le sarcophage è Sarcophage s’ouvre
+ Lire le poème
+ ETQ J GM un tableau de bord AD lancer les indices
+  ETQ J GM un tableau de bord AD déclencher les énigmes bugées
+
+Énigme 5 – Labyrinthe
+ Actionner les interrupteurs dans la bonne position è trappe avec électro aimant
+ Maintenir les 2 boutons è Activer électro aimant
+Utiliser l’électro aimant pour récupérer la boite du labyrinthe contenant la clé du livre
+ ETQ J GM un tableau de bord AD lancer les indices
+  ETQ J GM un tableau de bord AD déclencher les énigmes bugées
+
+Énigme 6 – Anubis
+ Ouvrir le cadenas du livre
+ Appuyer sur les boutons des livres de la bibliothèque dans le même ordre que sur la formule magique è Fait avancer Anubis
+ ETQ J GM un tableau de bord AD lancer les indices
+  ETQ J GM un tableau de bord AD déclencher les énigmes bugées
+
+Sortie
+ Stratégon les félicite
+ La porte s’ouvre
+ ETQ J GM un tableau de bord AD lancer les indices
+  ETQ J GM un tableau de bord AD déclencher les énigmes bugées

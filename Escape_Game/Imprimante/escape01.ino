@@ -82,6 +82,19 @@ bool isLivres = false;
 bool isImprimante = true;
 
 // ----------------------------------------------
+// MQTT Topics
+// ----------------------------------------------
+const char* MQTT_ARDUINO = "Anthony";
+const char* MQTT_USER = "cesep";
+const char* MQTT_PASS = "cesepasbl";
+const char* TOPIC_IMPRIMANTE = "test/anthony2/imprimante";
+const char* TOPIC_HORLOGE = "test/anthony2/horloge";
+const char* TOPIC_CADRE = "test/anthony2/cadre";
+const char* TOPIC_LIVRES = "test/anthony2/livres";
+const char* TOPIC_CONNEXION = "arduino/connexions/Shield02";
+const char* TOPIC_ETAT = "test/anthony2/etat";
+
+// ----------------------------------------------
 // Déclarations des fonctions
 // ----------------------------------------------
 void handleHorloge();
@@ -91,7 +104,9 @@ void handleImprimante();
 void setLCD(String ligne1, String ligne2);
 void mqttReconnect();
 void mqttCallback(char* topic, byte* payload, uint16_t length);
-void sendStatusMessage(const char* message);
+void sendStatusMessage(const char* topic, const char* message);
+void checkCodeInput();
+void checkResetCode();
 
 // ==============================================
 // Initialisation
@@ -141,8 +156,14 @@ void loop() {
   handleHorloge();
   handleCadre();
   handleLivres();
+  checkCodeInput();
+  checkResetCode();
+}
 
-  // Vérification du code
+// ----------------------------------------------
+// Vérification du code d'accès // Lié au LCD et à l'imprimante
+// ----------------------------------------------
+void checkCodeInput() {
   if (!lockedOut && !correctCodeEntered && (lcdTimer + LCD_PAUSE <= millis())) {
     char touche = clavier.getKey();
 
@@ -164,7 +185,7 @@ void loop() {
           lcdTimer = millis();
           correctCodeEntered = true;
           handleImprimante();
-          sendStatusMessage("Code valide, imprimante activée.");
+          sendStatusMessage(TOPIC_IMPRIMANTE, "Code valide, imprimante activée.");
         } else {
           setLCD("Code Incorrect!", "");
           lcdTimer = millis();
@@ -172,15 +193,19 @@ void loop() {
           if (attemptCount >= MAX_ATTEMPTS) {
             lockedOut = true;
             setLCD("Locked Out", "Reset needed");
-            sendStatusMessage("Système verrouillé après trop de tentatives.");
+            sendStatusMessage(TOPIC_IMPRIMANTE, "Système verrouillé après trop de tentatives.");
           }
         }
         codeInput = "";
       }
     }
   }
+}
 
-  // Vérification du code de réinitialisation
+// ----------------------------------------------
+// Vérification du code de réinitialisation // Lié au LCD et à l'imprimante
+// ----------------------------------------------
+void checkResetCode() {
   if (lockedOut) {
     char resetKey = clavier.getKey();
     if (resetKey) {
@@ -195,11 +220,11 @@ void loop() {
           attemptCount = 0;
           correctCodeEntered = false;
           setLCD("Enter code:", "");
-          sendStatusMessage("Système réinitialisé avec succès.");
+          sendStatusMessage(TOPIC_IMPRIMANTE, "Système réinitialisé avec succès.");
         } else {
           setLCD("Reset Failed", "");
           delay(2000);
-          sendStatusMessage("Code de réinitialisation incorrect.");
+          sendStatusMessage(TOPIC_IMPRIMANTE, "Code de réinitialisation incorrect.");
         }
         codeInput = "";
       }
@@ -208,7 +233,7 @@ void loop() {
 }
 
 // ----------------------------------------------
-// Gestion de l'horloge
+// Gestion de l'horloge // plus utile
 // ----------------------------------------------
 void handleHorloge() {
   if (isHorloge) {
@@ -216,7 +241,7 @@ void handleHorloge() {
       horlogeTimer = millis();
       byte horlogePosition = horlogeServo.read();
       horlogeServo.write(horlogePosition + 6);
-      sendStatusMessage("Horloge avancée de 6 degrés.");
+      sendStatusMessage(TOPIC_HORLOGE, "Horloge avancée de 6 degrés.");
     }
   }
 }
@@ -226,10 +251,10 @@ void handleCadre() {
   if (isVideoIntro) {
     if (isCadre) {
       cadreServo.write(0);  // Ouvre le cadre
-      sendStatusMessage("Cadre ouvert.");
+      sendStatusMessage(TOPIC_CADRE, "Cadre ouvert.");
     } else {
       cadreServo.write(90);  // Ferme le cadre
-      sendStatusMessage("Cadre fermé.");
+      sendStatusMessage(TOPIC_CADRE, "Cadre fermé.");
     }
   }
 }
@@ -249,17 +274,17 @@ void handleLivres() {
         livresTimer = millis();
         // Actions à réaliser selon le livre appuyé
         if (stateLivre1) {
-          sendStatusMessage("Livre 1 activé.");
+          sendStatusMessage(TOPIC_LIVRES, "Livre 1 activé.");
         } else if (stateLivre2) {
-          sendStatusMessage("Livre 2 activé.");
+          sendStatusMessage(TOPIC_LIVRES, "Livre 2 activé.");
         } else if (stateLivre3) {
-          sendStatusMessage("Livre 3 activé.");
+          sendStatusMessage(TOPIC_LIVRES, "Livre 3 activé.");
         } else if (stateLivre4) {
-          sendStatusMessage("Livre 4 activé.");
+          sendStatusMessage(TOPIC_LIVRES, "Livre 4 activé.");
         } else if (stateLivre5) {
-          sendStatusMessage("Livre 5 activé.");
+          sendStatusMessage(TOPIC_LIVRES, "Livre 5 activé.");
         } else if (stateLivre6) {
-          sendStatusMessage("Livre 6 activé.");
+          sendStatusMessage(TOPIC_LIVRES, "Livre 6 activé.");
         }
       }
     }
@@ -275,12 +300,12 @@ void handleImprimante() {
     delay(5000);  // Simulation de l'impression pendant 5 secondes
     setLCD("Printing Done", "love <3");
     boiteServo.write(0);  // Ouvre la boîte pour récupérer la pièce
-    sendStatusMessage("Impression terminée, boîte ouverte.");
+    sendStatusMessage(TOPIC_IMPRIMANTE, "Impression terminée, boîte ouverte.");
   }
 }
 
 // ----------------------------------------------
-// Gestion de l'écran LCD
+// Gestion de l'écran LCD // lié à l'imprimante
 // ----------------------------------------------
 void setLCD(String ligne1, String ligne2) {
   lcd.clear();
@@ -295,11 +320,11 @@ void setLCD(String ligne1, String ligne2) {
 // ----------------------------------------------
 void mqttReconnect() {
   while (!MQTT.connected()) {
-    if (MQTT.connect("Shield02", "cesep", "cesepasbl")) {
+    if (MQTT.connect(MQTT_ARDUINO, MQTT_USER, MQTT_PASS)){
       Serial.println("Connecté");
       MQTT.subscribe("arduino/connexions");
-      MQTT.publish("arduino/connexions/test", "Anthony");
-      sendStatusMessage("Connexion MQTT établie.");
+      MQTT.publish(TOPIC_CONNEXION, MQTT_USER);
+      sendStatusMessage(TOPIC_ETAT, "Connexion MQTT établie.");
     } else {
       Serial.print("échoué. rc = ");
       Serial.print(MQTT.state());
@@ -323,6 +348,6 @@ void mqttCallback(char* topic, byte* payload, uint16_t length) {
 // ----------------------------------------------
 // Envoi d'un message de statut au serveur MQTT
 // ----------------------------------------------
-void sendStatusMessage(const char* message) {
-  MQTT.publish("test/anthony2", message);
+void sendStatusMessage(const char* topic, const char* message) {
+  MQTT.publish(topic, message);
 }
